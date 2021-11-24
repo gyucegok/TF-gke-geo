@@ -1,4 +1,4 @@
-unittest/
+static-analysis/*.out
 *terraform.*
 plan.txt
 provider.tf

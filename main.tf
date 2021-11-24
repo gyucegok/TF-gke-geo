@@ -70,12 +70,28 @@ resource "google_container_cluster" "cluster1" {
   min_master_version = data.google_container_engine_versions.version1.latest_master_version
   network            = google_compute_network.default.name
   subnetwork         = google_compute_subnetwork.west1.name
+  monitoring_service = "monitoring.googleapis.com/kubernetes"
+  logging_service    = "logging.googleapis.com/kubernetes"
+  enable_shielded_nodes = "true"
+  private_cluster_config {
+    enable_private_nodes = true
+  }
+  resource_labels = {
+    "env" = "prod1"
+  }
+  network_policy {
+    enabled = true
+  }
+  pod_security_policy_config {
+        enabled = "true"
+  }
+
   // networking_mode    = VPC_NATIVE
 
   // Use legacy ABAC until these issues are resolved:
   //   https://github.com/mcuadros/terraform-provider-helm/issues/56
   //   https://github.com/terraform-providers/terraform-provider-kubernetes/pull/73
-  enable_legacy_abac = true
+  // enable_legacy_abac = true
 
   ip_allocation_policy {
     cluster_secondary_range_name = google_compute_subnetwork.west1.secondary_ip_range[0].range_name
@@ -95,9 +111,11 @@ resource "google_container_node_pool" "nodepool1" {
   location   = var.locationc1
   cluster    = google_container_cluster.cluster1.name
   node_count = 3
+  
 
   node_config {
     machine_type = "e2-medium"
+    image_type = "COS_CONTAINERD"
   }
 
   autoscaling {
@@ -119,12 +137,27 @@ resource "google_container_cluster" "cluster2" {
   min_master_version = data.google_container_engine_versions.version2.latest_master_version
   network            = google_compute_network.default.name
   subnetwork         = google_compute_subnetwork.west4.name
+  monitoring_service = "monitoring.googleapis.com/kubernetes"
+  logging_service    = "logging.googleapis.com/kubernetes"
+  enable_shielded_nodes = "true"
+  private_cluster_config {
+    enable_private_nodes = true
+  }
+  resource_labels = {
+    "env" = "prod2"
+  }
+  network_policy {
+    enabled = true
+  }
+  pod_security_policy_config {
+        enabled = "true"
+  }
   // networking_mode    = VPC_NATIVE
 
   // Use legacy ABAC until these issues are resolved:
   //   https://github.com/mcuadros/terraform-provider-helm/issues/56
   //   https://github.com/terraform-providers/terraform-provider-kubernetes/pull/73
-  enable_legacy_abac = true
+  // enable_legacy_abac = true
 
   ip_allocation_policy {
     cluster_secondary_range_name = google_compute_subnetwork.west4.secondary_ip_range[0].range_name
@@ -144,9 +177,11 @@ resource "google_container_node_pool" "nodepool2" {
   location   = var.locationc2
   cluster    = google_container_cluster.cluster2.name
   node_count = 3
+  
 
   node_config {
     machine_type = "e2-medium"
+    image_type = "COS_CONTAINERD"
   }
 
   autoscaling {

@@ -6,8 +6,8 @@ provider "google" {
 resource "google_project" "iamproject" {
   name              = var.project
   project_id        = var.project
-  folder_id         = ${FOLDER_ID}
-  billing_account   = ${BILLING_ACCOUNT}
+  folder_id         = ${TF_FOLDER_ID}
+  billing_account   = ${TF_BILLING_ACCOUNT}
 
   auto_create_network = "false"
 

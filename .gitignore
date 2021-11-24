@@ -1,3 +1,4 @@
+unittest/
 *terraform.*
 plan.txt
 provider.tf

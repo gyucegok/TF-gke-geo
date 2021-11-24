@@ -1,9 +1,9 @@
 variable "project" {
-  default = ${TF_PROJECT_NAME}
+  default = "${TF_PROJECT_NAME}"
 }
 
 variable "network_name" {
-  default = ${TF_NETWORK_NAME}
+  default = "${TF_NETWORK_NAME}"
 }
 
 variable "subnetwork_name1" {

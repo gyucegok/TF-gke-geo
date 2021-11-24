@@ -1,3 +1,3 @@
 #!/bin/bash
 
-for template in $(find . -name '*.tmplate'); do envsubst < ${template} > ${template%.*}; done
+for template in $(find . -name '*.tmplate'); do envsubst < ${template} > ../${template%.*}; done

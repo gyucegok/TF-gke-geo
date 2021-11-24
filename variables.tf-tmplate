@@ -1,9 +1,9 @@
 variable "project" {
-  default = PROJECT_NAME
+  default = ${PROJECT_NAME}
 }
 
 variable "network_name" {
-  default = NETWORK_NAME
+  default = ${NETWORK_NAME}
 }
 
 variable "subnetwork_name1" {

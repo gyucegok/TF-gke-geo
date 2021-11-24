@@ -1,0 +1,4 @@
+*terraform.*
+plan.txt
+provider.tf
+variables.tf

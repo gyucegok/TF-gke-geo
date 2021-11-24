@@ -1,0 +1,59 @@
+variable "project" {
+  default = PROJECT_NAME
+}
+
+variable "network_name" {
+  default = NETWORK_NAME
+}
+
+variable "subnetwork_name1" {
+  default = "west1"
+}
+
+variable "subnetwork_name2" {
+  default = "west4"
+}
+
+variable "regionc1" {
+  default = "europe-west1"
+}
+
+variable "locationc1" {
+  default = "europe-west1-c"
+}
+
+variable "regionc2" {
+  default = "europe-west4"
+}
+
+variable "locationc2" {
+  default = "europe-west4-b"
+}
+
+variable "cluster_name1" {
+  default = "cluster1"
+}
+
+variable "cluster_name2" {
+  default = "cluster2"
+}
+
+variable "gcp_service_list" {
+  type = list
+  default = [
+        "iam.googleapis.com",
+        "cloudresourcemanager.googleapis.com",
+        "compute.googleapis.com",
+        "anthos.googleapis.com",
+        "anthosgke.googleapis.com",
+        "anthosaudit.googleapis.com",
+        "container.googleapis.com", 
+        "gkeconnect.googleapis.com",
+        "gkehub.googleapis.com", 
+        "serviceusage.googleapis.com",
+        "stackdriver.googleapis.com",
+        "monitoring.googleapis.com",
+        "logging.googleapis.com",
+        "serviceusage.googleapis.com"
+]
+}

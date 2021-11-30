@@ -1,22 +1,15 @@
-
 resource "google_project_service" "project" {
-  project = google_project.iamproject.name
+  project = var.project
   count = length(var.gcp_service_list)  
   service = var.gcp_service_list[count.index]
 
   disable_dependent_services = true
 }
 
-resource "google_compute_network" "default" {
-  name                    = var.network_name
-  project                 = google_project.iamproject.name
-  auto_create_subnetworks = false
-}
-
 resource "google_compute_subnetwork" "west1" {
   name                     = var.subnetwork_name1
   ip_cidr_range            = "10.127.0.0/20"
-  network                  = google_compute_network.default.self_link
+  network                  = var.network_name
   region                   = var.regionc1
   private_ip_google_access = true
 
@@ -35,7 +28,7 @@ resource "google_compute_subnetwork" "west1" {
 resource "google_compute_subnetwork" "west4" {
   name                     = var.subnetwork_name2
   ip_cidr_range            = "10.126.0.0/20"
-  network                  = google_compute_network.default.self_link
+  network                  = var.network_name
   region                   = var.regionc2
   private_ip_google_access = true
 
@@ -68,24 +61,25 @@ resource "google_container_cluster" "cluster1" {
   initial_node_count = 1
   remove_default_node_pool = true
   min_master_version = data.google_container_engine_versions.version1.latest_master_version
-  network            = google_compute_network.default.name
+  network            = var.network_name
   subnetwork         = google_compute_subnetwork.west1.name
   monitoring_service = "monitoring.googleapis.com/kubernetes"
   logging_service    = "logging.googleapis.com/kubernetes"
   enable_shielded_nodes = "true"
-  private_cluster_config {
-    enable_private_nodes = true
-  }
+
+ // private_cluster_config {
+ //   enable_private_nodes = true
+ //   enable_private_endpoint = true
+ //   master_ipv4_cidr_block = "172.17.1.0/28"
+ //  }
+
   resource_labels = {
     "env" = "prod1"
   }
   network_policy {
     enabled = true
   }
-  pod_security_policy_config {
-        enabled = "true"
-  }
-
+  
   // networking_mode    = VPC_NATIVE
 
   // Use legacy ABAC until these issues are resolved:
@@ -135,23 +129,25 @@ resource "google_container_cluster" "cluster2" {
   initial_node_count = 1
   remove_default_node_pool = true
   min_master_version = data.google_container_engine_versions.version2.latest_master_version
-  network            = google_compute_network.default.name
+  network            = var.network_name
   subnetwork         = google_compute_subnetwork.west4.name
   monitoring_service = "monitoring.googleapis.com/kubernetes"
   logging_service    = "logging.googleapis.com/kubernetes"
   enable_shielded_nodes = "true"
-  private_cluster_config {
-    enable_private_nodes = true
-  }
+
+ // private_cluster_config {
+ //   enable_private_nodes = true
+ //   enable_private_endpoint = true
+ //   master_ipv4_cidr_block = "172.17.2.0/28"
+ // }
+
   resource_labels = {
     "env" = "prod2"
   }
   network_policy {
     enabled = true
   }
-  pod_security_policy_config {
-        enabled = "true"
-  }
+  
   // networking_mode    = VPC_NATIVE
 
   // Use legacy ABAC until these issues are resolved:
@@ -193,10 +189,6 @@ resource "google_container_node_pool" "nodepool2" {
     auto_repair   = true
     auto_upgrade   = true
   }
-}
-
-output "network" {
-  value = google_compute_network.default.name
 }
 
 output "subnetwork_name1" {

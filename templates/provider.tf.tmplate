@@ -2,17 +2,3 @@ provider "google" {
     project = var.project
     region  = var.regionc1 
 }
-
-resource "google_project" "iamproject" {
-  name              = var.project
-  project_id        = var.project
-  folder_id         = "${TF_FOLDER_ID}"
-  billing_account   = "${TF_BILLING_ACCOUNT}"
-
-  auto_create_network = "false"
-
-  provisioner "local-exec" {
-    when    = destroy
-    command = "sleep 90"
-  }
-}
